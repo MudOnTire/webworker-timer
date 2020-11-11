@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1 id="timer"></h1>
+  <button id="start">start</button>
+  <button id="end">end</button>
+
+
+  <script>
+    let count = 0;
+    const worker = new Worker('./worker.js');
+    const $timer = document.querySelector('#timer');
+    const $start = document.querySelector('#start');
+    const $end = document.querySelector('#end');
+    $start.addEventListener('click', function () {
+      worker.postMessage('start');
+    });
+    $end.addEventListener('click', function () {
+      worker.postMessage('stop');
+    });
+
+    worker.addEventListener('message', function (e) {
+      if (e.data === 'tick') {
+        count++;
+        $timer.textContent = count;
+      }
+    });
+  </script>
+</body>
+
+</html>
